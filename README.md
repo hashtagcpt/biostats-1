@@ -1,2 +1,2 @@
-# biostatics-1
+# biostats-1
 Biostatistics and Experimental Design I
