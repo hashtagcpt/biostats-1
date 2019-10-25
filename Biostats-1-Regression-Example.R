@@ -18,3 +18,14 @@ albumSales.1 <- lm(sales ~ adverts, data = album1)
 # We can check for the indivudal variables within our regression model. 
 ls(modelSummary)
 sqrt(modelSummary$r.squared)
+
+#### multiple regression ####
+
+# We can compute the simple restricted model first as a baseline.
+albumSales.2 <- glm(sales ~ adverts, data = album1)
+# Now we can grow the model to include multiple predictors.
+albumSales.3 <- glm(sales ~ adverts + airplay + attract, data = album1)
+
+# Now compare the summaries of the two models...
+summary(albumSales.2)
+summary(albumSales.3)
