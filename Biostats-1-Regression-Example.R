@@ -46,6 +46,8 @@ boot.ci(bootResults, type = "bca", index = 1) # intercept
 boot.ci(bootResults, type = "bca", index = 2) # adverts
 boot.ci(bootResults, type = "bca", index = 3) # airplay
 
+#### Logistic Regression Model ####
+
 install.packages('ISLR')
 library(ISLR)
 
