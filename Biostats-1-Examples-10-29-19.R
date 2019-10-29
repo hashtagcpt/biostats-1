@@ -130,23 +130,6 @@ pwr.anova.test(power = .25, k=4, f=0.2, sig.level=.05)
 # what's the ball park of the effect size we need to be looking at?
 pwr.anova.test(power = .25, k=4, n=12, sig.level=.05)
 
-
-#### Power Analysis ####
-install.packages('pwr')
-library(pwr)
-
-# what is the power of a two-group t-test with a moderate effect size and an alpha of .05?
-pwr.t.test(n=48*2,d=0.2,sig.level=0.05)
-
-# what is the power of a four variable moderate effect size anova?
-pwr.anova.test(k=4, n=12, f=0.2, sig.level=.05)
-
-# we can use this to calculate a required N
-pwr.anova.test(power = .25, k=4, f=0.2, sig.level=.05)
-
-# what's the ball park of the effect size we need to be looking at?
-pwr.anova.test(power = .25, k=4, n=12, sig.level=.05)
-
 #### Logistic Regression Model ####
 
 install.packages('ISLR')
