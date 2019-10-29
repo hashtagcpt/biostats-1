@@ -46,6 +46,91 @@ boot.ci(bootResults, type = "bca", index = 1) # intercept
 boot.ci(bootResults, type = "bca", index = 2) # adverts
 boot.ci(bootResults, type = "bca", index = 3) # airplay
 
+#### Effect Size ####
+
+# Cohen's d is a measure of effect size -- for a known variance, we can calculate it from the difference in means and a known standard deviation. For IQ, we know that the standard deviation is 15 and if we have a manipulation that increases IQ by 5 points, we can calculate Cohen's d as follows.
+
+mu1 <- 100
+mu2 <- 115
+sigma <- 15
+
+# Cohen's d
+d <- (mu2 - mu1) / sigma^2
+print(d)
+
+# For an unknown variance we can also calculate cohen's d, using known quantities from our sample and t-test...
+
+n_subjects_1 <- 30
+n_subjects_2 <- 30
+sample_data_1 <- rnorm(n = n_subjects_1, mean = 11.5, sd = 1.5)
+sample_data_2 <- rnorm(n = n_subjects_2, mean = 10.5, sd = 1.5)
+sample_data_3 <- rnorm(n = n_subjects_2, mean = 9.5, sd = 1.5)
+
+example.t <- t.test(sample_data_1, sample_data_2)
+example.t
+
+example.t13 <- t.test(sample_data_1, sample_data_3)
+example.t13
+
+example.t23 <- t.test(sample_data_2, sample_data_3)
+example.t23
+
+p.adjust(c(example.t$p.value, example.t13$p.value, example.t23$p.value), method = 'bonferroni')
+
+p.adjust(c(example.t$p.value, example.t13$p.value, example.t23$p.value), method = 'BH')
+
+d.computed <- example.t$statistic * sqrt(1/n_subjects_1 + 1/n_subjects_2)
+d.computed
+
+#install.packages('effsize')
+#install.packages('lsr')
+library(effsize)
+library(lsr)
+
+cohend <- cohen.d(sample_data_1,sample_data_2)
+print(cohend)
+
+d <- c(sample_data_1,sample_data_2)
+f <- rep(c("data_1",'data_2'), each = 30)
+
+# For the ANOVA things get a little bit more complicated, but we can use the function etaSquared from the lsr package. This function works on an ANOVA object like we saw in previous class. Let's load in genotype from MASS package and perform a two-way ANOVA.
+
+library(MASS)
+data(genotype)
+
+# assign the genotype to a data frame for convenience
+dat <- genotype
+
+# get our anova model
+anova.genotype <- aov(data = dat, Wt ~ Litter + Mother + Litter:Mother)
+anova.genotype <- aov(data = dat, Wt ~ Litter*Mother)
+
+# Post-hoc TukeyHSD
+TukeyHSD(anova.genotype)
+
+# summarize the ANOVA model
+summary(anova.genotype)
+
+# check to see the effect size of Mother
+etaSquared(anova.genotype)
+
+#### Power Analysis ####
+install.packages('pwr')
+library(pwr)
+
+# what is the power of a two-group t-test with a moderate effect size and an alpha of .05?
+pwr.t.test(n=48*2,d=0.2,sig.level=0.05)
+
+# what is the power of a four variable moderate effect size anova?
+pwr.anova.test(k=4, n=12, f=0.2, sig.level=.05)
+
+# we can use this to calculate a required N
+pwr.anova.test(power = .25, k=4, f=0.2, sig.level=.05)
+
+# what's the ball park of the effect size we need to be looking at?
+pwr.anova.test(power = .25, k=4, n=12, sig.level=.05)
+
+
 #### Power Analysis ####
 install.packages('pwr')
 library(pwr)
