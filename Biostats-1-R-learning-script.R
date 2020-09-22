@@ -1,8 +1,25 @@
 #### BIOSTATS 1 - R INTRO SCRIPT ####
 
 ### WEEK 1 ####
+
+# A very powerful command that will delete all the variables in the environment. It's for situations similar to those where you'd restart your phone because it just isn't working right.
 rm(list = ls()) 
 
+#### Block Randomization in R ####
+
+# Recall that we discussed block randomization briefly in class and why it is superior to simple randomization. Let's dig deeper into how to get a block randomized design with R.
+
+# First we need the right tools. Let's get them.
+
+install.packages('psych')
+library(psych)
+
+(condition_list <- block.random(n = 40, ncond = 2) # block random needs your n to be a multiple of the conditions
+
+library(knitr)
+library(kableExtras)
+condition_list %>% kable() %>% kable_styling() 
+ 
 #### R as a calculator ####
 
 # basic operations
