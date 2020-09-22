@@ -14,10 +14,9 @@ rm(list = ls())
 install.packages('psych')
 library(psych)
 
-(condition_list <- block.random(n = 40, ncond = 2) # block random needs your n to be a multiple of the conditions
+(condition_list <- block.random(n = 40, ncond = 2)) # block random needs your n to be a multiple of the conditions
 
 library(knitr)
-library(kableExtras)
 condition_list %>% kable() %>% kable_styling() 
  
 #### R as a calculator ####
