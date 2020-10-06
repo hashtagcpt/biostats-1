@@ -1,9 +1,11 @@
 #### Infected! ####
+rm(list = ls())
 
 # The R version... 
 
+# run this function to load it into memory
 doTheTest <- function(which_die, player_result, how_many_digits,cut_off) {
-  set.seed(which_die)
+  #set.seed(which_die)
   
   # do the "random" sampling -- NB it is not *really* random
   d4 <- sample(1:4)
@@ -14,7 +16,7 @@ doTheTest <- function(which_die, player_result, how_many_digits,cut_off) {
   d20 <- sample(1:20)
   d100 <- sample(c(10,20,30,40,50,60,70,80,90,100))
   
-  score <- sum(d4[1:how_many_digits], d6[1:how_many_digits], d8[1:how_many_digits], d10[1:how_many_digits], d12[1:how_many_digits], d20[1:how_many_digits], d100[1:how_many_digits])
+  score <- player_result / (player_result + sum(d4[1:how_many_digits]/4, d6[1:how_many_digits]/6, d8[1:how_many_digits]/8, d10[1:how_many_digits]/10, d12[1:how_many_digits]/12, d20[1:how_many_digits]/20, d100[1:how_many_digits]/100)) 
   return(score)
 }
 
@@ -32,19 +34,28 @@ player_result <- strtoi(player_result)
 name_infected <- readline(prompt = "Enter the name of the person who is possibly infected: ")
 
 # how many rolls should I do?
-how_many_rolls <- 1000
-how_many_digits <- 3
+how_many_rolls <- 100
+how_many_digits <- 2
 
 # A possible interpretation of the maximum score from this game might 960. This value is incorrect, but it is a reasonable answer given what we know at this point. [BONUS!] What is the maximum score? What does it depend on? 
 
 # That said, let's doTheTest!
-test_result <- doTheTest(which_die, player_result, how_many_digits, cut_off)
+
+# dummy var
+test_result <- c()
+
+for (tmp in 1:how_many_rolls) {
+  test_result[tmp] <- doTheTest(which_die, player_result, how_many_digits, cut_off)
+  Sys.sleep(0.1)
+  print(c("Score: ", test_result[tmp]))
+}
 
 # Our test result doesn't really mean anything at this point, it is just a score. We need a detection cut-off.
-detection_cutoff <- 224
+detection_cutoff <- .5
 
+test_result <- median(test_result)
 if (test_result >= detection_cutoff) {
-  print(cat(name_infected,"is infected, sorry, game over. Please play again."))
+  sprintf("%s is infected, sorry, game over. Please play again.", name_infected)
 } else {
   print("Clear to go!")
 }
