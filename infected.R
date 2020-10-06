@@ -41,10 +41,10 @@ how_many_digits <- 3
 test_result <- doTheTest(which_die, player_result, how_many_digits, cut_off)
 
 # Our test result doesn't really mean anything at this point, it is just a score. We need a detection cut-off.
-detection_cutoff <- 500
+detection_cutoff <- 224
 
 if (test_result >= detection_cutoff) {
-  print(c(name_infected," is infected, sorry, you are now dead. Please play again."))
+  print(cat(name_infected,"is infected, sorry, game over. Please play again."))
 } else {
   print("Clear to go!")
 }
@@ -90,7 +90,7 @@ if (test_result >= detection_cutoff) {
 #       print(sprintf("The probability that black was removed is %f", pBlackRemoved)) 
 #       print(sprintf("Bayes Factor (K) for (H = red removed) is %f", bayesfactor_k))
 #     } else {
-#       stopComputing <- TRUE
+#       stopComputing <- TRUE 
 #     }
 #   }
 #   return()
