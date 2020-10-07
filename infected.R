@@ -1,10 +1,10 @@
 #### Infected! ####
-rm(list = ls())
+rm(list = ls()) # removes all 
 
 # The R version... 
 
 # run this function to load it into memory
-doTheTest <- function(which_die, player_result, how_many_digits,cut_off) {
+doTheTest <- function(which_die, player_result, how_many_digits, cut_off) {
   #set.seed(which_die)
   
   # do the "random" sampling -- NB it is not *really* random
@@ -34,8 +34,8 @@ player_result <- strtoi(player_result)
 name_infected <- readline(prompt = "Enter the name of the person who is possibly infected: ")
 
 # how many rolls should I do?
-how_many_rolls <- 100
-how_many_digits <- 2
+how_many_rolls <- 10
+how_many_digits <- 4
 
 # A possible interpretation of the maximum score from this game might 960. This value is incorrect, but it is a reasonable answer given what we know at this point. [BONUS!] What is the maximum score? What does it depend on? 
 
