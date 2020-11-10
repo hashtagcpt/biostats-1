@@ -29,7 +29,7 @@ runCardBayes <- function() {
     if (card_color != 'Q') {
       if (card_color == 'R') {
         pRedRemoved <- bayesrule(pRedRemoved, conditionalRemoved, conditionalNotRemoved)
-        pBlackRemoved <- bayesrule(pBlackRemoved, conditionalNotRemoved,conditionalRemoved)
+        BlackRemoved <- bayesrule(pBlackRemoved, conditionalNotRemoved,conditionalRemoved)
       } else {
         pRedRemoved <- bayesrule(pRedRemoved, conditionalNotRemoved, conditionalRemoved)
         pBlackRemoved <- bayesrule(pBlackRemoved, conditionalRemoved,conditionalNotRemoved)
