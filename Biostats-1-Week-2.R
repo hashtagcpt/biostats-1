@@ -7,9 +7,9 @@ rm(list = ls())
 
 #### Block Randomization in R ####
 
-# Recall that we discussed block randomization briefly in class and why it is superior to simple randomization. Let's dig deeper into how to get a block randomized design with R.
+# Recall that we discussed block randomization briefly in class and why it is superior to simple randomization. Let's go deeper into creating a block randomized design with R.
 
-# First we need the right tools. Let's get them.
+# First, we need the right tools. Let's get them.
 
 install.packages('psych') 
 # not only do you have to install psych, but the tidyverse, and knitr
@@ -35,9 +35,9 @@ x <- original
 x <- x*2
 # multiply the new number by 5
 x <- x*5
-# divide by the original number
+# Divide by the original number
 x <- x / original
-# subtract 7 from the number
+# subtract seven from the number
 x <- x - 7
 
 # print to the console - answer will always be 3! 
@@ -67,25 +67,26 @@ log(vRoot, base = 10)
 ?log
 
 # See also the help tab in the Files, Plots, Packages, Help, and Viewer tab.
-# Also many of the basic recipies for much of what you'll want to do can be found at the site http://www.cookbook-r.com
+# Also, many of the basic recipes for much of what you'll want to do can be found at the site http://www.cookbook-r.com
 
 #### packages ####
 
 # installing packages
 install.packages('ggplot2') # only need to do this once
 
-# after it is in your environment you call
+# After the package is in your environment, you call
 library(ggplot2)
+# think of it as first buying an App to help you study from the App store and then opening it up.
 
 # install the tidyverse
-#install.packages('tidyverse')
+install.packages('tidyverse')
 
-# Want to update you packages to the latest versions?
+# Would you like to update your packages to the latest versions?
 update.packages()
 
-# More on packages and libraries later, but R, like all programming languages relies on extensions to the base language. In python you import, matlab you'll have external toolboxes, in C/C++ you'll have header files. This type of programming is often referred to as modular programming. The downside? Sometimes more than half the battle is finding the right library, package, extension, software development kit, or application programmer's interface, et cetera to do the job you need. 
+# More on packages and libraries later, but R, like all programming languages, relies on extensions to the base language. In python you import, matlab you'll have external toolboxes, in C/C++ you'll have header files. This type of programming is often referred to as modular programming. The downside? Sometimes more than half the battle is finding the right library, package, extension, software development kit, or application programmer's interface, et cetera to do the job you need. 
 
-# Back to R. Before you run it read the code below and ask yourself the question what is the value of y after the third line?
+# Back to R. Before you run it, read the code below and ask yourself the question, what is the value of y after the third line?
 x <- 50
 y <- x * 2
 x <- 80
