@@ -1,108 +1,136 @@
-#### Infected! ####
-rm(list = ls()) # removes all 
+# --- SCRIPT SETUP ---
 
-# The R version... 
+# Clear all objects from the R session to start fresh.
+rm(list = ls())
 
-# run this function to load it into memory
-doTheTest <- function(which_die, player_result, how_many_digits, cut_off) {
-  #set.seed(which_die)
+# Load the tidyverse package, which is useful for data manipulation and plotting.
+library(tidyverse)
+
+# Set a "seed" for the random number generator. This makes the script's
+# random outcomes reproducible every time it's run.
+set.seed(123)
+
+
+### Example 1: The "Infected!" Simulation Game 🎲
+# This script runs a simple interactive game to simulate a "test" for infection.
+# The player's chosen number is tested against a random value.
+
+# --- THE SIMULATION FUNCTION ---
+# This function calculates a single "test score".
+doTheTest <- function(player_result, how_many_digits) {
+  # The "test" involves a set of dice. We get a random outcome for each.
+  d4   <- sample(1:4)
+  d6   <- sample(1:6)
+  d8   <- sample(1:8)
+  d10  <- sample(1:10)
+  d12  <- sample(1:12)
+  d20  <- sample(1:20)
+  d100 <- sample(seq(10, 100, by = 10))
   
-  # do the "random" sampling -- NB it is not *really* random
-  d4 <- sample(1:4)
-  d6 <- sample(1:6)
-  d8 <- sample(1:8)
-  d10 <- sample(1:10)
-  d12 <- sample(1:12)
-  d20 <- sample(1:20)
-  d100 <- sample(c(10,20,30,40,50,60,70,80,90,100))
+  # The denominator is a complex random value based on the dice rolls.
+  random_denominator <- sum(
+    d4[1:how_many_digits] / 4,
+    d6[1:how_many_digits] / 6,
+    d8[1:how_many_digits] / 8,
+    d10[1:how_many_digits] / 10,
+    d12[1:how_many_digits] / 12,
+    d20[1:how_many_digits] / 20,
+    d100[1:how_many_digits] / 100
+  )
   
-  score <- player_result / (player_result + sum(d4[1:how_many_digits]/4, d6[1:how_many_digits]/6, d8[1:how_many_digits]/8, d10[1:how_many_digits]/10, d12[1:how_many_digits]/12, d20[1:how_many_digits]/20, d100[1:how_many_digits]/100)) 
+  # The final score is a ratio of the player's result to the total.
+  score <- player_result / (player_result + random_denominator)
   return(score)
 }
 
-# Rules:
+# --- RUN THE SIMULATION ---
+## Game Parameters
+how_many_rolls <- 10 # How many times we run the test to get a stable median.
+how_many_digits <- 4 # Complexity of the random value (must be between 1 and 4).
+detection_cutoff <- 0.5 # The score needed to be considered "infected".
 
-# 1. run first
-which_die <- readline(prompt = "Which die are you rolling? ")
+## User Input
+cat("--- Welcome to the 'Infected!' Simulation ---\n")
+name_infected <- readline(prompt = "Enter the name of the person being tested: ")
+player_result <- as.integer(readline(prompt = "Enter a test result (a whole number, e.g., 5): "))
 
-# 2. run second
-which_die <- strtoi(which_die)
-player_result <- readline(prompt="Enter the result: ")
+# This vector will store the score from each roll.
+test_scores <- c()
 
-# 3. run third
-player_result <- strtoi(player_result)
-name_infected <- readline(prompt = "Enter the name of the person who is possibly infected: ")
-
-# how many rolls should I do?
-how_many_rolls <- 10
-how_many_digits <- 4
-
-# A possible interpretation of the maximum score from this game might 960. This value is incorrect, but it is a reasonable answer given what we know at this point. [BONUS!] What is the maximum score? What does it depend on? 
-
-# That said, let's doTheTest!
-
-# dummy var
-test_result <- c()
-
-for (tmp in 1:how_many_rolls) {
-  test_result[tmp] <- doTheTest(which_die, player_result, how_many_digits, cut_off)
-  Sys.sleep(0.1)
-  print(c("Score: ", test_result[tmp]))
+cat("\n--- Running Simulation ---\n")
+# This loop runs the test `how_many_rolls` times.
+for (i in 1:how_many_rolls) {
+  score <- doTheTest(player_result, how_many_digits)
+  test_scores[i] <- score
+  cat(sprintf("Run %d: Score = %.4f\n", i, score))
+  Sys.sleep(0.1) # Pause briefly to make the simulation easier to watch.
 }
 
-# Our test result doesn't really mean anything at this point, it is just a score. We need a detection cut-off.
-detection_cutoff <- .5
+# --- GET THE FINAL RESULT ---
+final_median_score <- median(test_scores)
 
-test_result <- median(test_result)
-if (test_result >= detection_cutoff) {
-  sprintf("%s is infected, sorry, game over. Please play again.", name_infected)
+cat("\n--- Final Diagnosis ---\n")
+cat(sprintf("The median test score for %s was %.4f\n", name_infected, final_median_score))
+cat(sprintf("The detection cutoff is %.2f\n", detection_cutoff))
+
+# Compare the final score to the detection cutoff.
+if (final_median_score >= detection_cutoff) {
+  cat(sprintf("\nResult: %s is INFECTED. Game over.\n", name_infected))
 } else {
-  print("Clear to go!")
+  cat(sprintf("\nResult: %s is CLEAR. You are safe for now!\n"))
 }
 
+# Add a separator for clarity between the two examples.
+cat("\n\n-------------------------------------------------\n\n")
 
-# runCardBayes <- function() {
-#   rm(list = ls())
-#   readcolor <- function() { 
-#     n <- readline(prompt="Enter color of the card removed (R or B) : ")
-#     n <- toupper(n)
-#     if (is.na(n) || ((n != 'R') && (n != 'B') && (n != 'Q'))) {
-#       n <- readcolor()
-#     }
-#     return(n)
-#   }
-#   
-#   bayesrule <- function(prior, conditional1, conditional2) {
-#     posterior <- (prior * conditional1) / ((prior * conditional1) + (1-prior * conditional2))
-#   }
-#   
-#   # set the prior probability that red has been removed from the deck
-#   pRedRemoved <- 0.5
-#   pBlackRemoved <- 0.5
-#   
-#   conditionalRemoved <- 13/39 # conditional probability if a red suit has been removed
-#   conditionalNotRemoved <- 26/39 # conditional probability if a red suit has not been removed
-#   
-#   # set our conditional variable
-#   stopComputing <- FALSE
-#   
-#   while (stopComputing != TRUE) {
-#     card_color <- readcolor()
-#     if (card_color != 'Q') {
-#       if (card_color == 'R') {
-#         pRedRemoved <- bayesrule(pRedRemoved, conditionalRemoved, conditionalNotRemoved)
-#         pBlackRemoved <- bayesrule(pBlackRemoved, conditionalNotRemoved,conditionalRemoved)
-#       } else {
-#         pRedRemoved <- bayesrule(pRedRemoved, conditionalNotRemoved, conditionalRemoved)
-#         pBlackRemoved <- bayesrule(pBlackRemoved, conditionalRemoved,conditionalNotRemoved)
-#       }  
-#       bayesfactor_k <- pRedRemoved / pBlackRemoved
-#       print(sprintf("The probability that red was removed is %f", pRedRemoved))
-#       print(sprintf("The probability that black was removed is %f", pBlackRemoved)) 
-#       print(sprintf("Bayes Factor (K) for (H = red removed) is %f", bayesfactor_k))
-#     } else {
-#       stopComputing <- TRUE 
-#     }
-#   }
-#   return()
-# }
+
+### Example 2: Simulating and Comparing Different Dice 🎲
+# This script simulates a large number of rolls for different types of dice
+# (d4, d6, etc.) to explore their statistical properties.
+
+# --- THE SIMULATION ---
+# Define the types of dice and how many times to roll each one.
+dice_types <- c(4, 6, 8, 10, 12, 20)
+n_rolls <- 10000
+
+# Use `map_dfr` to run a simulation for each die type and combine the
+# results into a single, clean data frame.
+all_rolls_data <- map_dfr(dice_types, ~{
+  tibble(
+    die = paste0("d", .x),
+    roll = sample(1:.x, size = n_rolls, replace = TRUE)
+  )
+})
+
+# --- SUMMARIZING THE RESULTS ---
+# Calculate the mean and standard deviation for each type of die.
+dice_summary <- all_rolls_data %>%
+  group_by(die) %>%
+  summarize(
+    mean_roll = mean(roll),
+    sd_roll = sd(roll)
+  )
+
+# Print the summary table.
+# The factor levels are reordered to ensure a logical d4 -> d20 order.
+print(
+    dice_summary %>%
+    mutate(die = fct_relevel(die, "d4", "d6", "d8", "d10", "d12", "d20")) %>%
+    arrange(die)
+)
+
+# --- VISUALIZING THE DISTRIBUTIONS ---
+# A density plot shows the shape of each die's distribution.
+# A single die roll has a flat (uniform) distribution.
+ggplot(all_rolls_data, aes(x = roll, fill = die)) +
+  geom_density(alpha = 0.5) +
+  # `facet_wrap` creates a separate plot for each die type.
+  facet_wrap(~fct_relevel(die, "d4", "d6", "d8", "d10", "d12", "d20")) +
+  labs(
+    title = "Probability Distributions of Different Sided Dice",
+    subtitle = "Each die type has a unique uniform distribution.",
+    x = "Die Roll Outcome",
+    y = "Density"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none") # Hide the legend as the facets are labeled.
