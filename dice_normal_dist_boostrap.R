@@ -1,6 +1,6 @@
 #### normal distribution - example with dice ####
 
-# get the mean for the dice
+# Get the mean for the dice
 # d4, d6, d8, d10, d12, d20
 
 d4 <- 1:4
@@ -10,7 +10,7 @@ d10 <- 1:10
 d12 <- 1:12
 d20 <- 1:20
 
-# create probability vectors for each die
+# Create probability vectors for each die
 d4_prob <- c(rep(1 / length(d4), length(d4)), rep(0, length(d20) - length(d4)))
 d6_prob <- c(rep(1 / length(d6), length(d6)), rep(0, length(d20) - length(d6)))
 d8_prob <- c(rep(1 / length(d8), length(d8)), rep(0, length(d20) - length(d8)))
@@ -99,4 +99,3 @@ boot_card_2_ci
 boot_my_sample <- boot(data = my_sample, statistic = b.mean, R = 999)
 # plot(boot_my_sample)
 boot_my_sample_ci <- boot.ci(boot.out = boot_my_sample, type = c("perc"), index = 1)
-
